@@ -45,21 +45,7 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> connect() async {
     try {
-      // 创建DNS解析器
-      InternetAddress result = (await InternetAddress.lookup(
-        'ems-monitor.kayz.tech',
-        type: InternetAddressType.IPv4,
-      ))
-          .first;
-
-      addLog('DNS resolved: ${result.address}');
-
-      // 创建socket时指定本地端口
-      socket = await Socket.connect(
-        result.address,
-        7777,
-        //sourcePort: 2001,
-      );
+      socket = await Socket.connect('ems-monitor.kayz.tech', 7777);
       addLog('Connected to server');
       addLog('Remote: ${socket!.remoteAddress.address}:${socket!.remotePort}');
       addLog('Local: ${socket!.address.address}:${socket!.port}');
@@ -90,7 +76,6 @@ class _MainPageState extends State<MainPage> {
     stopSendingData();
     socket?.destroy();
     socket = null;
-    addLog('Disconnected from server');
     setState(() {
       isConnected = false;
     });
@@ -364,6 +349,8 @@ class _MainPageState extends State<MainPage> {
       0x22,
       0x3a
     ];
+    socket?.add(data);
+    socket?.add(data);
     socket?.add(data);
   }
 
